@@ -4,7 +4,6 @@ namespace Restaurant.Data
 {
     public class Reservation
     {
-        [Id]
         public int Id { get; set; }
         public DateTime ReserveTime { get; set; }
         [ForeignKey("UserId")]
