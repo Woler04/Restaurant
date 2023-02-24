@@ -9,6 +9,7 @@ namespace Restaurant.Data
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public virtual AppUser? User { get; set; }
+
         [ForeignKey("TableId")]
         public string TableId { get; set; }
         public virtual Table? Table { get; set; }
