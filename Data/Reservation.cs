@@ -11,7 +11,6 @@ namespace Restaurant.Data
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public virtual AppUser? User { get; set; }
-        [ForeignKey("Id")]
         public int ResTabId { get; set; }
         public virtual RestTabs? ResTable { get; set; }
         public string Description { get; set; }
