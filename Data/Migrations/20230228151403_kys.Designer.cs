@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant.Data;
 
@@ -11,9 +12,10 @@ using Restaurant.Data;
 namespace Restaurant.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230228151403_kys")]
+    partial class kys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,14 +244,11 @@ namespace Restaurant.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ResTabId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ResTableId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ReserveTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -257,20 +256,20 @@ namespace Restaurant.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResTableId");
+                    b.HasIndex("TableId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservation");
                 });
 
-            modelBuilder.Entity("Restaurant.Data.RestTabs", b =>
+            modelBuilder.Entity("Restaurant.Data.Table", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TableId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TableId"), 1L, 1);
 
                     b.Property<int>("Seats")
                         .HasColumnType("int");
@@ -278,7 +277,7 @@ namespace Restaurant.Data.Migrations
                     b.Property<bool>("isSmoking")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("TableId");
 
                     b.ToTable("Table");
                 });
@@ -355,9 +354,11 @@ namespace Restaurant.Data.Migrations
 
             modelBuilder.Entity("Restaurant.Data.Reservation", b =>
                 {
-                    b.HasOne("Restaurant.Data.RestTabs", "ResTable")
+                    b.HasOne("Restaurant.Data.Table", "Table")
                         .WithMany()
-                        .HasForeignKey("ResTableId");
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Restaurant.Data.AppUser", "User")
                         .WithMany("ReservationsList")
@@ -365,7 +366,7 @@ namespace Restaurant.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ResTable");
+                    b.Navigation("Table");
 
                     b.Navigation("User");
                 });
